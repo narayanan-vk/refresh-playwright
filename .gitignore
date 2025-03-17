@@ -5,6 +5,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/monocart-report/
 
 # Logs
 logs

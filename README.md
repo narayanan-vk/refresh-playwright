@@ -10,6 +10,18 @@
     pnpm exec playwright test
 ```
 
+- Serve the html report. 
+
+``` bash​
+    pnpm playwright show-report
+```
+
+- Serve the monocart report. 
+
+``` bash​
+    pnpm monocart show-report monocart-report/index.html
+```
+
 - Starts the interactive UI mode.
  
 ``` bash 
