@@ -1,5 +1,7 @@
 # Refresh playwright
 
+[![Playwright Tests](https://github.com/narayanan-vk/refresh-playwright/actions/workflows/playwright.yml/badge.svg)](https://github.com/narayanan-vk/refresh-playwright/actions/workflows/playwright.yml)
+
 ## Commands
 
 - Runs the end-to-end tests. 
