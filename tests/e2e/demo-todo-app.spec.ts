@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { TodoPageFactory } from "../../src/factories/todo-page-factory";
+import { TodoPageFactory } from "@factories/todo-page-factory";
 
 let todoPageFactory: TodoPageFactory;
 
