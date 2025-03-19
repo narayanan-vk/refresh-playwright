@@ -1,7 +1,11 @@
 import { test, expect, type Page } from "@playwright/test";
+import { TodoPageFactory } from "../../src/factories/todo-page-factory";
+
+let todoPageFactory: TodoPageFactory;
 
 test.beforeEach(async ({ page }) => {
   await page.goto("https://demo.playwright.dev/todomvc");
+  todoPageFactory = new TodoPageFactory(page);
 });
 
 const TODO_ITEMS = [
@@ -11,29 +15,25 @@ const TODO_ITEMS = [
 ] as const;
 
 test.describe("New Todo", () => {
+
   test("should allow me to add todo items", async ({ page }) => {
-    // create a new todo locator
-    const newTodo = page.getByPlaceholder("What needs to be done?");
+
+    let todoPage = todoPageFactory.getTodoPage();
 
     await test.step("Create 1st todo.", async () => {
-      await newTodo.fill(TODO_ITEMS[0]);
-      await newTodo.press("Enter");
+      await todoPage.createATodoItem(TODO_ITEMS[0]);
     });
 
     await test.step("Make sure the list only has one todo item.", async () => {
-      await expect(page.getByTestId("todo-title")).toHaveText([TODO_ITEMS[0]]);
+      await todoPage.checkSavedTodoItems([TODO_ITEMS[0]]);
     });
 
     await test.step("Create 2nd todo.", async () => {
-      await newTodo.fill(TODO_ITEMS[1]);
-      await newTodo.press("Enter");
+      await todoPage.createATodoItem(TODO_ITEMS[1]);
     });
 
     await test.step("Make sure the list now has two todo items.", async () => {
-      await expect(page.getByTestId("todo-title")).toHaveText([
-        TODO_ITEMS[0],
-        TODO_ITEMS[1],
-      ]);
+      await todoPage.checkSavedTodoItems([TODO_ITEMS[0], TODO_ITEMS[1]]);
     });
 
     await checkNumberOfTodosInLocalStorage(page, 2);
