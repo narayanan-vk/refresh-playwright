@@ -9,10 +9,11 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.51.0-noble
+      image: mcr.microsoft.com/playwright:v1.52.0-noble
       options: --user 1001
     steps:
     - uses: actions/checkout@v4
+
     - name: Install pnpm
       uses: pnpm/action-setup@v4
       with:
@@ -21,21 +22,43 @@ jobs:
       with:
         node-version: lts/*
         cache: 'pnpm'
+
     - name: Install dependencies
       run: pnpm install
+
     - name: Run Playwright tests
       run: pnpm exec playwright test
-    - uses: actions/upload-artifact@v4
+
+    - name: Upload html report
+      uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
         path: playwright-report/
-        retention-days: 30
+        retention-days: 7
     
-    - name: Publish test report
+    - name: Upload monocart report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: monocart-report
+        path: monocart-report/
+        retention-days: 7
+    
+    - name: Publish monocart test report
       uses: peaceiris/actions-gh-pages@v3
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
-        publish_dir: playwright-report
+        publish_dir: monocart-report
+    
+    - name: Set report URL as output, annotation and to job summary
+      if: always()
+      id: set_url
+      run: |
+        REPORT_URL="https://narayanan-vk.github.io/refresh-playwright/"
+        echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
+        echo "::notice title=Test Report Available::View the full test report at $REPORT_URL"
+        echo "## 📊 Test Report" >> $GITHUB_STEP_SUMMARY
+        echo "📝 [View Full Test Report]($REPORT_URL)" >> $GITHUB_STEP_SUMMARY
