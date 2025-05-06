@@ -5,9 +5,14 @@ on:
   pull_request:
     branches: [ main, master ]
 jobs:
-  test:
+  playwright-tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
     container:
       image: mcr.microsoft.com/playwright:v1.52.0-noble
       options: --user 1001
@@ -27,31 +32,63 @@ jobs:
       run: pnpm install
 
     - name: Run Playwright tests
-      run: pnpm exec playwright test
+      run: pnpm exec playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+
+    - name: Upload blob report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: blob-report-${{ matrix.shardIndex }}
+        path: blob-report/
+        retention-days: 1
+  
+  merge-reports:
+    runs-on: ubuntu-latest
+    needs: playwright-tests
+    if: ${{ !cancelled() }}
+    steps:
+
+    - name: Download blob reports from GitHub Actions Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-blob-reports
+        pattern: blob-report-*
+        merge-multiple: true
+
+    - name: Merge into HTML Report
+      run: pnpm exec playwright merge-reports --reporter html ./all-blob-reports
 
     - name: Upload html report
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 7
+        name: html-report--attempt-${{ github.run_attempt }}
+        path: html-report/
+        retention-days: 1
     
-    - name: Upload monocart report
-      uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: monocart-report
-        path: monocart-report/
-        retention-days: 7
+    # - name: Upload monocart report
+    #   uses: actions/upload-artifact@v4
+    #   if: ${{ !cancelled() }}
+    #   with:
+    #     name: monocart-report-${{ matrix.shardIndex }}
+    #     path: monocart-report/
+    #     retention-days: 1
     
-    - name: Publish monocart test report
+    - name: Publish html test report
       uses: peaceiris/actions-gh-pages@v3
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
-        publish_dir: monocart-report
+        publish_dir: html-report
+
+    # - name: Publish monocart test report
+    #   uses: peaceiris/actions-gh-pages@v3
+    #   if: always()
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     publish_branch: gh-pages
+    #     publish_dir: monocart-report
     
     - name: Set report URL as output, annotation and to job summary
       if: always()
