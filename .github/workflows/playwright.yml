@@ -96,22 +96,24 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
         publish_dir: playwright-report
-        keep_files: true
-        full_commit_message: ${{ github.event.head_commit.message }}
+        destination_dir: ${{ github.run_id }}/html-report
+        full_commit_message: html-report-${{ github.event.head_commit.message }}
 
-    # - name: Publish monocart test report
-    #   uses: peaceiris/actions-gh-pages@v3
-    #   if: always()
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     publish_branch: gh-pages
-    #     publish_dir: monocart-report
+    - name: Publish monocart test report
+      uses: peaceiris/actions-gh-pages@v3
+      if: always()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: monocart-report
+        destination_dir: ${{ github.run_id }}/monocart-report
+        full_commit_message: monocart-report-${{ github.event.head_commit.message }}
     
     - name: Set report URL as output, annotation and to job summary
       if: always()
       id: set_url
       run: |
-        REPORT_URL="https://narayanan-vk.github.io/refresh-playwright/"
+        REPORT_URL="https://narayanan-vk.github.io/refresh-playwright/${{ github.run_id }}/"
         echo "report_url=$REPORT_URL" >> $GITHUB_OUTPUT
         echo "::notice title=Test Report Available::View the full test report at $REPORT_URL"
         echo "## 📊 Test Report" >> $GITHUB_STEP_SUMMARY
