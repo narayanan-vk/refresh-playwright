@@ -78,7 +78,7 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: html-report--attempt-${{ github.run_attempt }}
-        path: html-report/
+        path: playwright-report
         retention-days: 1
     
     # - name: Upload monocart report
@@ -95,7 +95,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
-        publish_dir: html-report
+        publish_dir: playwright-report
 
     # - name: Publish monocart test report
     #   uses: peaceiris/actions-gh-pages@v3
