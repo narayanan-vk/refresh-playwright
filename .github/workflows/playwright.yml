@@ -110,6 +110,7 @@ jobs:
       run: |
         # Create temporary directory for organizing files
         mkdir -p gh-pages-content/html-report/${{ github.run_id }}
+        mkdir -p gh-pages-content/monocart-report
         
         # Move files to their respective locations
         cp -r playwright-report/* gh-pages-content/html-report/${{ github.run_id }}/
