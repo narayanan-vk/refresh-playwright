@@ -8,7 +8,7 @@ export default {
       {
         name: "Refresh Playwright Test Execution Report",
         outputFile: "./monocart-report/index.html",
-        trend: "./monocart-report/index.json",
+        trend: process.env.TREND_FILE_PATH ?? "./monocart-report/index.json",
       },
     ],
   ],

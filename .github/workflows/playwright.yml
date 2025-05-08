@@ -70,8 +70,16 @@ jobs:
         pattern: blob-report-*
         merge-multiple: true
 
-    - name: Merge into HTML Report
-      run: pnpm exec playwright merge-reports --config=src/configurations/merge-report.config.ts ./all-blob-reports
+    - name: Fetch trend file from gh-pages branch
+      run: |
+        git fetch origin gh-pages
+        git show origin/gh-pages:monocart-report/index.json > monocart-report/index.json || echo '{}' > monocart-report/index.json
+        echo "TREND_FILE_PATH=$(pwd)/monocart-report/index.json" >> $GITHUB_ENV
+
+    - name: Generate merged report
+      run: |
+        echo "Using trend file path: $TREND_FILE_PATH"
+        pnpm exec playwright merge-reports --config=src/configurations/merge-report.config.ts ./all-blob-reports
 
     - name: Upload html report
       uses: actions/upload-artifact@v4
@@ -96,6 +104,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
         publish_dir: playwright-report
+        keep_files: true
         destination_dir: html-report/${{ github.run_id }}
         full_commit_message: html-report-${{ github.event.head_commit.message }}
 
