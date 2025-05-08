@@ -8,7 +8,7 @@ test.describe('Playwright Example Tests', () => {
 
   test('has title', { tag: ['@smoke', '@critical'] }, async ({ page }) => {  
     // Expect a title "to contain" a substring.
-    await expect(page).toHaveTitle(/Playwrighty/);
+    await expect(page).toHaveTitle(/Playwright/);
   });
   
   test('get started link', { tag: ['@smoke', '@critical'] }, async ({ page }) => {
