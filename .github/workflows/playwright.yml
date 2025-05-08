@@ -72,9 +72,24 @@ jobs:
 
     - name: Fetch trend file from gh-pages branch
       run: |
-        git fetch origin gh-pages
-        git show origin/gh-pages:monocart-report/index.json > monocart-report/index.json || echo '{}' > monocart-report/index.json
+        # Create directory if it doesn't exist
+        mkdir -p monocart-report
+        
+        # Try to fetch the file, if it fails create an empty JSON object
+        git fetch origin gh-pages || true
+        git show origin/gh-pages:monocart-report/index.json > monocart-report/index.json 2>/dev/null || echo '{}' > monocart-report/index.json
+        
+        # Set the environment variable with absolute path
         echo "TREND_FILE_PATH=$(pwd)/monocart-report/index.json" >> $GITHUB_ENV
+        
+        # Verify the file exists and is valid JSON
+        if [ -f "$(pwd)/monocart-report/index.json" ]; then
+          echo "Trend file created successfully"
+          cat monocart-report/index.json | jq '.' >/dev/null 2>&1 || echo '{}' > monocart-report/index.json
+        else
+          echo "Creating empty trend file"
+          echo '{}' > monocart-report/index.json
+        fi
 
     - name: Generate merged report
       run: |
