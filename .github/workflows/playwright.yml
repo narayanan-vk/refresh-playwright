@@ -96,43 +96,34 @@ jobs:
         echo "Using trend file path: $TREND_FILE_PATH"
         pnpm exec playwright merge-reports --config=src/configurations/merge-report.config.ts ./all-blob-reports
 
-    - name: Upload html report
+    - name: Upload test reports
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: html-report--attempt-${{ github.run_attempt }}
-        path: playwright-report
+        name: test-reports--attempt-${{ github.run_attempt }}
+        path: |
+          playwright-report
+          monocart-report
         retention-days: 1
-    
-    - name: Upload monocart report
-      uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: monocart-report
-        path: monocart-report
-        retention-days: 1
-    
-    - name: Publish html test report
-      uses: peaceiris/actions-gh-pages@v3
-      if: always()
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: playwright-report
-        keep_files: true
-        destination_dir: html-report/${{ github.run_id }}
-        full_commit_message: html-report-${{ github.event.head_commit.message }}
 
-    - name: Publish monocart test report
+    - name: Prepare reports directory structure for gh-pages
+      run: |
+        # Create temporary directory for organizing files
+        mkdir -p gh-pages-content/html-report/${{ github.run_id }}
+        
+        # Move files to their respective locations
+        cp -r playwright-report/* gh-pages-content/html-report/${{ github.run_id }}/
+        cp -r monocart-report/* gh-pages-content/monocart-report/
+    
+    - name: Publish test reports to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
-        publish_dir: monocart-report
-        destination_dir: monocart-report
+        publish_dir: gh-pages-content
         keep_files: true
-        full_commit_message: monocart-report-${{ github.event.head_commit.message }}
+        full_commit_message: test reports update - ${{ github.event.head_commit.message }}
     
     - name: Set report URL as output, annotation and to job summary
       if: always()
