@@ -38,8 +38,8 @@ export default defineConfig({
     // Populates context with given storage state.
     storageState: "state.json",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
-    screenshot: "on",
+    trace: "retain-on-failure",
+    screenshot: "on-first-failure",
   },
 
   /* Configure projects for major browsers */
