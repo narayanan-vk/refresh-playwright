@@ -4,11 +4,21 @@ export class TodoPage {
   private page: Page;
   private todoEntryField: Locator;
   private todoItemSaved: Locator;
+  private todoItems: Locator;
+  private toggleAllCheckbox: Locator;
+  private todoCount: Locator;
+  private clearCompletedButton: Locator;
+  private filters: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.todoEntryField = this.page.getByPlaceholder("What needs to be done?");
     this.todoItemSaved = this.page.getByTestId("todo-title");
+    this.todoItems = this.page.getByTestId("todo-item");
+    this.toggleAllCheckbox = this.page.getByLabel("Mark all as complete");
+    this.todoCount = this.page.getByTestId("todo-count");
+    this.clearCompletedButton = this.page.getByRole("button", { name: "Clear completed" });
+    this.filters = this.page.getByRole("link");
   }
 
   async createATodoItem(todoItemName: string) {
@@ -16,7 +26,119 @@ export class TodoPage {
     await this.todoEntryField.press("Enter");
   }
 
-  async checkSavedTodoItems(todoItemName: string[]) {
-    await expect(this.todoItemSaved).toHaveText(todoItemName);
+  async checkSavedTodoItems(todoItemName: readonly string[]) {
+    await expect(this.todoItemSaved).toHaveText([...todoItemName]);
+  }
+
+  async verifyTodoInputEmpty() {
+    await expect(this.todoEntryField).toBeEmpty();
+  }
+
+  async createDefaultTodos(items: readonly string[]) {
+    for (const item of items) {
+      await this.createATodoItem(item);
+    }
+  }
+
+  async verifyTodoCount(count: number) {
+    await expect(this.todoCount).toContainText(`${count}`);
+  }
+
+  async markAllAsComplete() {
+    await this.toggleAllCheckbox.check();
+  }
+
+  async unMarkAllAsComplete() {
+    await this.toggleAllCheckbox.uncheck();
+  }
+
+  async verifyAllTodosCompleted() {
+    await expect(this.todoItems).toHaveClass(["completed", "completed", "completed"]);
+  }
+
+  async verifyNoTodosCompleted() {
+    await expect(this.todoItems).toHaveClass(["", "", ""]);
+  }
+
+  async toggleTodoItem(index: number) {
+    const todo = this.todoItems.nth(index);
+    await todo.getByRole("checkbox").check();
+  }
+
+  async unToggleTodoItem(index: number) {
+    const todo = this.todoItems.nth(index);
+    await todo.getByRole("checkbox").uncheck();
+  }
+
+  async verifyTodoItemCompleted(index: number) {
+    const todo = this.todoItems.nth(index);
+    await expect(todo).toHaveClass("completed");
+  }
+
+  async verifyTodoItemNotCompleted(index: number) {
+    const todo = this.todoItems.nth(index);
+    await expect(todo).not.toHaveClass("completed");
+  }
+
+  async verifyToggleAllChecked() {
+    await expect(this.toggleAllCheckbox).toBeChecked();
+  }
+
+  async verifyToggleAllNotChecked() {
+    await expect(this.toggleAllCheckbox).not.toBeChecked();
+  }
+
+  async editTodoItem(index: number, newText: string) {
+    const todo = this.todoItems.nth(index);
+    await todo.dblclick();
+    await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+    await todo.getByRole("textbox", { name: "Edit" }).press("Enter");
+  }
+
+  async verifyEditMode(index: number) {
+    const todo = this.todoItems.nth(index);
+    await expect(todo.getByRole("checkbox")).not.toBeVisible();
+    await expect(todo.locator("label")).not.toBeVisible();
+  }
+
+  async editTodoItemAndBlur(index: number, newText: string) {
+    const todo = this.todoItems.nth(index);
+    await todo.dblclick();
+    await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+    await todo.getByRole("textbox", { name: "Edit" }).dispatchEvent("blur");
+  }
+
+  async cancelEdit(index: number, newText: string) {
+    const todo = this.todoItems.nth(index);
+    await todo.dblclick();
+    await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+    await todo.getByRole("textbox", { name: "Edit" }).press("Escape");
+  }
+
+  async clearCompleted() {
+    await this.clearCompletedButton.click();
+  }
+
+  async verifyClearCompletedVisible() {
+    await expect(this.clearCompletedButton).toBeVisible();
+  }
+
+  async verifyClearCompletedHidden() {
+    await expect(this.clearCompletedButton).toBeHidden();
+  }
+
+  async filterAll() {
+    await this.filters.nth(0).click();
+  }
+
+  async filterActive() {
+    await this.filters.nth(1).click();
+  }
+
+  async filterCompleted() {
+    await this.filters.nth(2).click();
+  }
+  async verifyFilterSelected(filterName: string) {
+    await expect(this.filters.filter({ has: this.page.locator('.selected') })).toHaveText(filterName);
   }
 }
