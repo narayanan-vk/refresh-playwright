@@ -1,0 +1,176 @@
+# Test info
+
+- Name: Routing >> should highlight the currently applied filter
+- Location: /__w/refresh-playwright/refresh-playwright/tests/e2e/demo-todo-app.spec.ts:273:7
+
+# Error details
+
+```
+Error: Timed out 5000ms waiting for expect(locator).toHaveText(expected)
+
+Locator: getByRole('link').filter({ has: locator('.selected') })
+Expected string: "All"
+Received: <element(s) not found>
+Call log:
+  - expect.toHaveText with timeout 5000ms
+  - waiting for getByRole('link').filter({ has: locator('.selected') })
+
+    at TodoPage.verifyFilterSelected (/__w/refresh-playwright/refresh-playwright/src/page-objects/todo-page/todo-page.ts:142:80)
+    at /__w/refresh-playwright/refresh-playwright/tests/e2e/demo-todo-app.spec.ts:275:20
+```
+
+# Page snapshot
+
+```yaml
+- text: This is just a demo of TodoMVC for testing, not the
+- link "real TodoMVC app.":
+  - /url: https://todomvc.com/
+- heading "todos" [level=1]
+- textbox "What needs to be done?"
+- checkbox "❯Mark all as complete"
+- text: ❯Mark all as complete
+- list:
+  - listitem:
+    - checkbox "Toggle Todo"
+    - text: buy some cheese
+  - listitem:
+    - checkbox "Toggle Todo" [checked]
+    - text: feed the cat
+    - button "Delete": ×
+  - listitem:
+    - checkbox "Toggle Todo"
+    - text: book a doctors appointment
+- strong: "2"
+- text: items left
+- list:
+  - listitem:
+    - link "All":
+      - /url: "#/"
+  - listitem:
+    - link "Active":
+      - /url: "#/active"
+  - listitem:
+    - link "Completed":
+      - /url: "#/completed"
+- button "Clear completed"
+- contentinfo:
+  - paragraph: Double-click to edit a todo
+  - paragraph:
+    - text: Created by
+    - link "Remo H. Jansen":
+      - /url: http://github.com/remojansen/
+  - paragraph:
+    - text: Part of
+    - link "TodoMVC":
+      - /url: http://todomvc.com
+```
+
+# Test source
+
+```ts
+   42 |
+   43 |   async verifyTodoCount(count: number) {
+   44 |     await expect(this.todoCount).toContainText(`${count}`);
+   45 |   }
+   46 |
+   47 |   async markAllAsComplete() {
+   48 |     await this.toggleAllCheckbox.check();
+   49 |   }
+   50 |
+   51 |   async unMarkAllAsComplete() {
+   52 |     await this.toggleAllCheckbox.uncheck();
+   53 |   }
+   54 |
+   55 |   async verifyAllTodosCompleted() {
+   56 |     await expect(this.todoItems).toHaveClass(["completed", "completed", "completed"]);
+   57 |   }
+   58 |
+   59 |   async verifyNoTodosCompleted() {
+   60 |     await expect(this.todoItems).toHaveClass(["", "", ""]);
+   61 |   }
+   62 |
+   63 |   async toggleTodoItem(index: number) {
+   64 |     const todo = this.todoItems.nth(index);
+   65 |     await todo.getByRole("checkbox").check();
+   66 |   }
+   67 |
+   68 |   async unToggleTodoItem(index: number) {
+   69 |     const todo = this.todoItems.nth(index);
+   70 |     await todo.getByRole("checkbox").uncheck();
+   71 |   }
+   72 |
+   73 |   async verifyTodoItemCompleted(index: number) {
+   74 |     const todo = this.todoItems.nth(index);
+   75 |     await expect(todo).toHaveClass("completed");
+   76 |   }
+   77 |
+   78 |   async verifyTodoItemNotCompleted(index: number) {
+   79 |     const todo = this.todoItems.nth(index);
+   80 |     await expect(todo).not.toHaveClass("completed");
+   81 |   }
+   82 |
+   83 |   async verifyToggleAllChecked() {
+   84 |     await expect(this.toggleAllCheckbox).toBeChecked();
+   85 |   }
+   86 |
+   87 |   async verifyToggleAllNotChecked() {
+   88 |     await expect(this.toggleAllCheckbox).not.toBeChecked();
+   89 |   }
+   90 |
+   91 |   async editTodoItem(index: number, newText: string) {
+   92 |     const todo = this.todoItems.nth(index);
+   93 |     await todo.dblclick();
+   94 |     await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+   95 |     await todo.getByRole("textbox", { name: "Edit" }).press("Enter");
+   96 |   }
+   97 |
+   98 |   async verifyEditMode(index: number) {
+   99 |     const todo = this.todoItems.nth(index);
+  100 |     await expect(todo.getByRole("checkbox")).not.toBeVisible();
+  101 |     await expect(todo.locator("label")).not.toBeVisible();
+  102 |   }
+  103 |
+  104 |   async editTodoItemAndBlur(index: number, newText: string) {
+  105 |     const todo = this.todoItems.nth(index);
+  106 |     await todo.dblclick();
+  107 |     await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+  108 |     await todo.getByRole("textbox", { name: "Edit" }).dispatchEvent("blur");
+  109 |   }
+  110 |
+  111 |   async cancelEdit(index: number, newText: string) {
+  112 |     const todo = this.todoItems.nth(index);
+  113 |     await todo.dblclick();
+  114 |     await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+  115 |     await todo.getByRole("textbox", { name: "Edit" }).press("Escape");
+  116 |   }
+  117 |
+  118 |   async clearCompleted() {
+  119 |     await this.clearCompletedButton.click();
+  120 |   }
+  121 |
+  122 |   async verifyClearCompletedVisible() {
+  123 |     await expect(this.clearCompletedButton).toBeVisible();
+  124 |   }
+  125 |
+  126 |   async verifyClearCompletedHidden() {
+  127 |     await expect(this.clearCompletedButton).toBeHidden();
+  128 |   }
+  129 |
+  130 |   async filterAll() {
+  131 |     await this.filters.nth(0).click();
+  132 |   }
+  133 |
+  134 |   async filterActive() {
+  135 |     await this.filters.nth(1).click();
+  136 |   }
+  137 |
+  138 |   async filterCompleted() {
+  139 |     await this.filters.nth(2).click();
+  140 |   }
+  141 |   async verifyFilterSelected(filterName: string) {
+> 142 |     await expect(this.filters.filter({ has: this.page.locator('.selected') })).toHaveText(filterName);
+      |                                                                                ^ Error: Timed out 5000ms waiting for expect(locator).toHaveText(expected)
+  143 |   }
+  144 | }
+  145 |
+```

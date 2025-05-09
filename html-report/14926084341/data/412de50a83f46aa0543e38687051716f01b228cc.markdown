@@ -1,0 +1,399 @@
+# Test info
+
+- Name: Routing >> should allow me to display all items
+- Location: /__w/refresh-playwright/refresh-playwright/tests/e2e/demo-todo-app.spec.ts:265:7
+
+# Error details
+
+```
+Error: Timed out 5000ms waiting for expect(locator).toHaveText(expected)
+
+Locator: getByTestId('todo-title')
+- Expected  - 5
++ Received  + 1
+
+- Array [
+-   "buy some cheese",
+-   "feed the cat",
+-   "book a doctors appointment",
+- ]
++ Array []
+Call log:
+  - expect.toHaveText with timeout 5000ms
+  - waiting for getByTestId('todo-title')
+    9 × locator resolved to 0 elements
+
+    at TodoPage.checkSavedTodoItems (/__w/refresh-playwright/refresh-playwright/src/page-objects/todo-page/todo-page.ts:30:38)
+    at /__w/refresh-playwright/refresh-playwright/tests/e2e/demo-todo-app.spec.ts:270:20
+```
+
+# Page snapshot
+
+```yaml
+- banner:
+  - img "TodoMVC"
+  - paragraph:
+    - text: Helping you
+    - strong: select
+    - text: an MV* framework
+  - navigation:
+    - link "Download":
+      - /url: https://github.com/tastejs/todomvc/archive/master.zip
+    - link "View on GitHub":
+      - /url: https://github.com/tastejs/todomvc
+    - link "Blog":
+      - /url: https://medium.com/@tastejs
+  - img "TodoMVC"
+- heading "Introduction" [level=2]
+- paragraph: Developers have a number of choices today when it comes to selecting a JavaScript framework or UI library for building scalable web apps.
+- paragraph: React / Next.js, Vue / Nuxt, Angular…the list of solutions continues to grow, but just how do you decide on which to use in a sea of so many options?
+- paragraph: To help you understand the options, we created TodoMVC - a project which has offered the same Todo applications implemented in popular JavaScript frameworks for the last decade.
+- paragraph:
+  - text: TodoMVC is useful for comparing syntax and solutions, is officially used in cross-browser benchmarks (e.g.
+  - link "Speedometer":
+    - /url: https://browserbench.org/Speedometer3.0/
+  - text: ) and aims to stay up to date as trends change over time.
+- iframe
+- iframe
+- iframe
+- heading "Examples" [level=2]
+- tablist:
+  - tab "JavaScript" [selected]
+  - tab "Compile-to-JS"
+  - tab "Labs"
+- paragraph: These are examples written in pure JavaScript.
+- list:
+  - listitem:
+    - link "React New":
+      - /url: examples/react/dist/
+  - listitem:
+    - link "React Redux New":
+      - /url: examples/react-redux/dist
+  - listitem:
+    - link "Vue.js New":
+      - /url: examples/vue/dist/
+  - listitem:
+    - link "Preact New":
+      - /url: examples/preact/dist/
+  - listitem:
+    - link "Backbone.js New":
+      - /url: examples/backbone/dist/
+  - listitem:
+    - link "Angular New":
+      - /url: examples/angular/dist/browser/
+  - listitem:
+    - link "Ember.js New":
+      - /url: examples/emberjs/todomvc/dist/
+  - listitem:
+    - link "Lit New":
+      - /url: examples/lit/dist/
+  - listitem:
+    - link "KnockoutJS":
+      - /url: examples/knockoutjs/
+  - listitem:
+    - link "Dojo":
+      - /url: examples/dojo/
+  - listitem:
+    - link "Knockback.js":
+      - /url: examples/knockback/
+  - listitem:
+    - link "CanJS":
+      - /url: examples/canjs/
+  - listitem:
+    - link "Polymer":
+      - /url: examples/polymer/index.html
+  - listitem:
+    - link "Mithril":
+      - /url: examples/mithril/
+  - listitem:
+    - link "Marionette.js":
+      - /url: examples/backbone_marionette/
+- separator
+- heading "Compare these to a non-framework implementation" [level=2]
+- list:
+  - listitem:
+    - link "JavaScript ES5 New":
+      - /url: examples/javascript-es5/dist/
+  - listitem:
+    - link "JavaScript ES6 New":
+      - /url: examples/javascript-es6/dist/
+  - listitem:
+    - link "jQuery New":
+      - /url: examples/jquery/dist/
+  - listitem:
+    - link "Web Components New":
+      - /url: examples/web-components/dist/
+- separator
+- list:
+  - listitem: New = New or updated app
+- separator
+- blockquote:
+  - paragraph: “ TodoMVC is an immensely valuable attempt at a difficult problem - providing a structured way of comparing JS libraries and frameworks. TodoMVC is a lone data point in a sea of conjecture and opinion. ”
+  - contentinfo:
+    - text: —
+    - link "Justin Meyer":
+      - /url: https://github.com/justinbmeyer
+- img "Todo app screenshot"
+- separator
+- heading "New in 1.4" [level=2]
+- list:
+  - listitem:
+    - text: ✔
+    - heading "New Additions ✨" [level=4]
+    - paragraph: To stay representative of frameworks & language features used on the web, we added a few new example apps.
+    - text: Examples ▼
+    - list:
+      - listitem:
+        - text: ✔
+        - link "Angular 17":
+          - /url: examples/angular/dist/browser/
+      - listitem:
+        - text: ✔
+        - link "Lit":
+          - /url: examples/lit/dist/
+      - listitem:
+        - text: ✔
+        - link "Preact":
+          - /url: examples/preact/dist/
+      - listitem:
+        - text: ✔
+        - link "React Redux":
+          - /url: examples/react-redux/dist/
+      - listitem:
+        - text: ✔
+        - link "Svelte":
+          - /url: examples/svelte/dist/
+      - listitem:
+        - text: ✔
+        - link "Web Components":
+          - /url: examples/web-components/dist/
+  - listitem:
+    - text: ✔
+    - heading "Updated Versions 🧹" [level=4]
+    - paragraph: Some updates to examples that were out-of-date, but still widely used on the web.
+    - text: Examples ▼
+    - list:
+      - listitem:
+        - text: ✔
+        - link "Backbone":
+          - /url: examples/backbone/dist/
+      - listitem:
+        - text: ✔
+        - link "Ember":
+          - /url: examples/emberjs/todomvc/dist/
+      - listitem:
+        - text: ✔
+        - link "jQuery":
+          - /url: examples/jquery/dist/
+      - listitem:
+        - text: ✔
+        - link "React":
+          - /url: examples/react/dist/
+      - listitem:
+        - text: ✔
+        - link "Vue":
+          - /url: examples/vue/dist/
+      - listitem:
+        - text: ✔
+        - link "JavaScript ES5":
+          - /url: examples/javascript-es5/
+      - listitem:
+        - text: ✔
+        - link "JavaScript ES6":
+          - /url: examples/javascript-es6/
+  - listitem: ✔ Misc. updates to the homepage.
+- heading "Selecting a Framework" [level=2]
+- paragraph: Once you've downloaded the latest release and played around with the apps, you'll want to decide on a specific framework to try out.
+- paragraph: Study the syntax required for defining models, views and (where applicable) controllers and classes in the frameworks you're interested in and try your hand at editing the code to see how it feels using it first-hand.
+- paragraph: Please ensure that if you're happy with this, you do spend more time investigating the framework (including reading the official docs, the source and its complete feature list). There's often a lot more to a framework than what we present in our examples.
+- heading "Getting Involved" [level=2]
+- paragraph: Is there a bug we haven't fixed or an MV* framework you feel would benefit from being included in TodoMVC?
+- paragraph:
+  - text: If so, feel free to fork the repo, read our
+  - link "contribution guidelines":
+    - /url: https://github.com/tastejs/todomvc/wiki
+  - text: ", and submit a pull request — we'll be happy to review it for inclusion."
+- paragraph:
+  - text: Make sure you use the
+  - link "template":
+    - /url: https://github.com/tastejs/todomvc-app-template
+  - text: as a starting point and read the
+  - link "app specification":
+    - /url: https://github.com/tastejs/todomvc/blob/master/app-spec.md
+  - text: .
+- paragraph:
+  - link "Submit Pull Request »":
+    - /url: https://github.com/tastejs/todomvc/wiki
+- separator
+- contentinfo:
+  - paragraph:
+    - text: Brought to you by
+    - link "Addy OsmaniAddy":
+      - /url: https://github.com/addyosmani
+      - img "Addy Osmani"
+      - text: Addy
+    - link "Sindre SorhusSindre":
+      - /url: https://github.com/sindresorhus
+      - img "Sindre Sorhus"
+      - text: Sindre
+    - link "Pascal HartigPascal":
+      - /url: https://github.com/passy
+      - img "Pascal Hartig"
+      - text: Pascal
+    - link "Stephen SawchukStephen":
+      - /url: https://github.com/stephenplusplus
+      - img "Stephen Sawchuk"
+      - text: Stephen
+    - link "Colin EberhardtColin":
+      - /url: https://github.com/colineberhardt
+      - img "Colin Eberhardt"
+      - text: Colin
+    - link "Arthur VerschaeveArthur":
+      - /url: https://github.com/arthurvr
+      - img "Arthur Verschaeve"
+      - text: Arthur
+    - link "Sam SacconeSam":
+      - /url: https://github.com/samccone
+      - img "Sam Saccone"
+      - text: Sam
+    - link "Sam SacconeFady":
+      - /url: https://github.com/FadySamirSadek
+      - img "Sam Saccone"
+      - text: Fady
+```
+
+# Test source
+
+```ts
+   1 | import { expect, Locator, Page } from "@playwright/test";
+   2 |
+   3 | export class TodoPage {
+   4 |   private page: Page;
+   5 |   private todoEntryField: Locator;
+   6 |   private todoItemSaved: Locator;
+   7 |   private todoItems: Locator;
+   8 |   private toggleAllCheckbox: Locator;
+   9 |   private todoCount: Locator;
+   10 |   private clearCompletedButton: Locator;
+   11 |   private filters: Locator;
+   12 |
+   13 |   constructor(page: Page) {
+   14 |     this.page = page;
+   15 |     this.todoEntryField = this.page.getByPlaceholder("What needs to be done?");
+   16 |     this.todoItemSaved = this.page.getByTestId("todo-title");
+   17 |     this.todoItems = this.page.getByTestId("todo-item");
+   18 |     this.toggleAllCheckbox = this.page.getByLabel("Mark all as complete");
+   19 |     this.todoCount = this.page.getByTestId("todo-count");
+   20 |     this.clearCompletedButton = this.page.getByRole("button", { name: "Clear completed" });
+   21 |     this.filters = this.page.getByRole("link");
+   22 |   }
+   23 |
+   24 |   async createATodoItem(todoItemName: string) {
+   25 |     await this.todoEntryField.fill(todoItemName);
+   26 |     await this.todoEntryField.press("Enter");
+   27 |   }
+   28 |
+   29 |   async checkSavedTodoItems(todoItemName: readonly string[]) {
+>  30 |     await expect(this.todoItemSaved).toHaveText([...todoItemName]);
+      |                                      ^ Error: Timed out 5000ms waiting for expect(locator).toHaveText(expected)
+   31 |   }
+   32 |
+   33 |   async verifyTodoInputEmpty() {
+   34 |     await expect(this.todoEntryField).toBeEmpty();
+   35 |   }
+   36 |
+   37 |   async createDefaultTodos(items: readonly string[]) {
+   38 |     for (const item of items) {
+   39 |       await this.createATodoItem(item);
+   40 |     }
+   41 |   }
+   42 |
+   43 |   async verifyTodoCount(count: number) {
+   44 |     await expect(this.todoCount).toContainText(`${count}`);
+   45 |   }
+   46 |
+   47 |   async markAllAsComplete() {
+   48 |     await this.toggleAllCheckbox.check();
+   49 |   }
+   50 |
+   51 |   async unMarkAllAsComplete() {
+   52 |     await this.toggleAllCheckbox.uncheck();
+   53 |   }
+   54 |
+   55 |   async verifyAllTodosCompleted() {
+   56 |     await expect(this.todoItems).toHaveClass(["completed", "completed", "completed"]);
+   57 |   }
+   58 |
+   59 |   async verifyNoTodosCompleted() {
+   60 |     await expect(this.todoItems).toHaveClass(["", "", ""]);
+   61 |   }
+   62 |
+   63 |   async toggleTodoItem(index: number) {
+   64 |     const todo = this.todoItems.nth(index);
+   65 |     await todo.getByRole("checkbox").check();
+   66 |   }
+   67 |
+   68 |   async unToggleTodoItem(index: number) {
+   69 |     const todo = this.todoItems.nth(index);
+   70 |     await todo.getByRole("checkbox").uncheck();
+   71 |   }
+   72 |
+   73 |   async verifyTodoItemCompleted(index: number) {
+   74 |     const todo = this.todoItems.nth(index);
+   75 |     await expect(todo).toHaveClass("completed");
+   76 |   }
+   77 |
+   78 |   async verifyTodoItemNotCompleted(index: number) {
+   79 |     const todo = this.todoItems.nth(index);
+   80 |     await expect(todo).not.toHaveClass("completed");
+   81 |   }
+   82 |
+   83 |   async verifyToggleAllChecked() {
+   84 |     await expect(this.toggleAllCheckbox).toBeChecked();
+   85 |   }
+   86 |
+   87 |   async verifyToggleAllNotChecked() {
+   88 |     await expect(this.toggleAllCheckbox).not.toBeChecked();
+   89 |   }
+   90 |
+   91 |   async editTodoItem(index: number, newText: string) {
+   92 |     const todo = this.todoItems.nth(index);
+   93 |     await todo.dblclick();
+   94 |     await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+   95 |     await todo.getByRole("textbox", { name: "Edit" }).press("Enter");
+   96 |   }
+   97 |
+   98 |   async verifyEditMode(index: number) {
+   99 |     const todo = this.todoItems.nth(index);
+  100 |     await expect(todo.getByRole("checkbox")).not.toBeVisible();
+  101 |     await expect(todo.locator("label")).not.toBeVisible();
+  102 |   }
+  103 |
+  104 |   async editTodoItemAndBlur(index: number, newText: string) {
+  105 |     const todo = this.todoItems.nth(index);
+  106 |     await todo.dblclick();
+  107 |     await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+  108 |     await todo.getByRole("textbox", { name: "Edit" }).dispatchEvent("blur");
+  109 |   }
+  110 |
+  111 |   async cancelEdit(index: number, newText: string) {
+  112 |     const todo = this.todoItems.nth(index);
+  113 |     await todo.dblclick();
+  114 |     await todo.getByRole("textbox", { name: "Edit" }).fill(newText);
+  115 |     await todo.getByRole("textbox", { name: "Edit" }).press("Escape");
+  116 |   }
+  117 |
+  118 |   async clearCompleted() {
+  119 |     await this.clearCompletedButton.click();
+  120 |   }
+  121 |
+  122 |   async verifyClearCompletedVisible() {
+  123 |     await expect(this.clearCompletedButton).toBeVisible();
+  124 |   }
+  125 |
+  126 |   async verifyClearCompletedHidden() {
+  127 |     await expect(this.clearCompletedButton).toBeHidden();
+  128 |   }
+  129 |
+  130 |   async filterAll() {
+```
