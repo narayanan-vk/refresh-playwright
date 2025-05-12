@@ -38,14 +38,18 @@ test.describe("New Todo", () => {
     await checkNumberOfTodosInLocalStorage(page, 2);
   });
 
-  test("should clear text input field when an item is added", async ({ page }) => {
+  test("should clear text input field when an item is added", async ({
+    page,
+  }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.createATodoItem(TODO_ITEMS[0]);
     await todoPage.verifyTodoInputEmpty();
     await checkNumberOfTodosInLocalStorage(page, 1);
   });
 
-  test("should append new items to the bottom of the list", async ({ page }) => {
+  test("should append new items to the bottom of the list", async ({
+    page,
+  }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.createDefaultTodos(TODO_ITEMS);
     await todoPage.verifyTodoCount(3);
@@ -72,14 +76,18 @@ test.describe("Mark all as completed", () => {
     await checkNumberOfCompletedTodosInLocalStorage(page, 3);
   });
 
-  test("should allow me to clear the complete state of all items", async ({ page }) => {
+  test("should allow me to clear the complete state of all items", async ({
+    page,
+  }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.markAllAsComplete();
     await todoPage.unMarkAllAsComplete();
     await todoPage.verifyNoTodosCompleted();
   });
 
-  test("complete all checkbox should update state when items are completed / cleared", async ({ page }) => {
+  test("complete all checkbox should update state when items are completed / cleared", async ({
+    page,
+  }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.markAllAsComplete();
     await todoPage.verifyToggleAllChecked();
@@ -130,7 +138,11 @@ test.describe("Item", () => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.createDefaultTodos(TODO_ITEMS);
     await todoPage.editTodoItem(1, "buy some sausages");
-    await todoPage.checkSavedTodoItems([TODO_ITEMS[0], "buy some sausages", TODO_ITEMS[2]]);
+    await todoPage.checkSavedTodoItems([
+      TODO_ITEMS[0],
+      "buy some sausages",
+      TODO_ITEMS[2],
+    ]);
     await checkTodosInLocalStorage(page, "buy some sausages");
   });
 });
@@ -144,25 +156,35 @@ test.describe("Editing", () => {
 
   test("should hide other controls when editing", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
-    await todoPage.verifyEditMode(1);
+    await todoPage.verifyEditMode(1, TODO_ITEMS[1]);
     await checkNumberOfTodosInLocalStorage(page, 3);
   });
 
   test("should save edits on blur", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.editTodoItemAndBlur(1, "buy some sausages");
-    await todoPage.checkSavedTodoItems([TODO_ITEMS[0], "buy some sausages", TODO_ITEMS[2]]);
+    await todoPage.checkSavedTodoItems([
+      TODO_ITEMS[0],
+      "buy some sausages",
+      TODO_ITEMS[2],
+    ]);
     await checkTodosInLocalStorage(page, "buy some sausages");
   });
 
   test("should trim entered text", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.editTodoItem(1, "    buy some sausages    ");
-    await todoPage.checkSavedTodoItems([TODO_ITEMS[0], "buy some sausages", TODO_ITEMS[2]]);
+    await todoPage.checkSavedTodoItems([
+      TODO_ITEMS[0],
+      "buy some sausages",
+      TODO_ITEMS[2],
+    ]);
     await checkTodosInLocalStorage(page, "buy some sausages");
   });
 
-  test("should remove the item if an empty text string was entered", async ({ page }) => {
+  test("should remove the item if an empty text string was entered", async ({
+    page,
+  }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.editTodoItem(1, "");
     await todoPage.checkSavedTodoItems([TODO_ITEMS[0], TODO_ITEMS[2]]);
@@ -207,7 +229,9 @@ test.describe("Clear completed button", () => {
     await todoPage.checkSavedTodoItems([TODO_ITEMS[0], TODO_ITEMS[2]]);
   });
 
-  test("should be hidden when there are no items that are completed", async ({ page }) => {
+  test("should be hidden when there are no items that are completed", async ({
+    page,
+  }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.toggleTodoItem(0);
     await todoPage.clearCompleted();
@@ -218,15 +242,15 @@ test.describe("Clear completed button", () => {
 test.describe("Persistence", () => {
   test("should persist its data", async ({ page }) => {
     const todoPage = todoPageFactory.getTodoPage();
-    
+
     // Create new todo items
     await todoPage.createDefaultTodos(TODO_ITEMS.slice(0, 2));
 
     // Create 2nd page with todos
     const secondPage = await page.context().newPage();
-    await secondPage.goto('https://demo.playwright.dev/todomvc');
+    await secondPage.goto("https://demo.playwright.dev/todomvc");
     const secondTodoPage = new TodoPage(secondPage);
-    
+
     await secondTodoPage.checkSavedTodoItems([TODO_ITEMS[0], TODO_ITEMS[1]]);
   });
 });
@@ -241,12 +265,21 @@ test.describe("Routing", () => {
 
   test("should allow me to display active items", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
+    await todoPage.toggleTodoItem(1);
+    await checkNumberOfCompletedTodosInLocalStorage(page, 1);
     await todoPage.filterActive();
     await todoPage.checkSavedTodoItems([TODO_ITEMS[0], TODO_ITEMS[2]]);
   });
 
   test("should respect the back button", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
+    await todoPage.toggleTodoItem(1);
+    await checkNumberOfCompletedTodosInLocalStorage(page, 1);
+    await todoPage.checkSavedTodoItems([
+      TODO_ITEMS[0],
+      TODO_ITEMS[1],
+      TODO_ITEMS[2],
+    ]);
     await todoPage.filterActive();
     await todoPage.filterCompleted();
     await todoPage.checkSavedTodoItems([TODO_ITEMS[1]]);
@@ -258,12 +291,16 @@ test.describe("Routing", () => {
 
   test("should allow me to display completed items", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
+    await todoPage.toggleTodoItem(1);
+    await checkNumberOfCompletedTodosInLocalStorage(page, 1);
     await todoPage.filterCompleted();
     await todoPage.checkSavedTodoItems([TODO_ITEMS[1]]);
   });
 
   test("should allow me to display all items", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
+    await todoPage.toggleTodoItem(1);
+    await checkNumberOfCompletedTodosInLocalStorage(page, 1);
     await todoPage.filterActive();
     await todoPage.filterCompleted();
     await todoPage.filterAll();
@@ -273,27 +310,42 @@ test.describe("Routing", () => {
   test("should highlight the currently applied filter", async ({ page }) => {
     let todoPage = todoPageFactory.getTodoPage();
     await todoPage.verifyFilterSelected("All");
+    await todoPage.verifyFilterNotSelected("Active");
+    await todoPage.verifyFilterNotSelected("Completed");
     await todoPage.filterActive();
     await todoPage.verifyFilterSelected("Active");
+    await todoPage.verifyFilterNotSelected("All");
+    await todoPage.verifyFilterNotSelected("Completed");
     await todoPage.filterCompleted();
     await todoPage.verifyFilterSelected("Completed");
+    await todoPage.verifyFilterNotSelected("All");
+    await todoPage.verifyFilterNotSelected("Active");
   });
 });
 
 async function checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
-  return await page.waitForFunction(e => {
-    return JSON.parse(localStorage['react-todos']).length === e;
+  return await page.waitForFunction((e) => {
+    return JSON.parse(localStorage["react-todos"]).length === e;
   }, expected);
 }
 
-async function checkNumberOfCompletedTodosInLocalStorage(page: Page, expected: number) {
-  return await page.waitForFunction(e => {
-    return JSON.parse(localStorage['react-todos']).filter((todo: any) => todo.completed).length === e;
+async function checkNumberOfCompletedTodosInLocalStorage(
+  page: Page,
+  expected: number
+) {
+  return await page.waitForFunction((e) => {
+    return (
+      JSON.parse(localStorage["react-todos"]).filter(
+        (todo: any) => todo.completed
+      ).length === e
+    );
   }, expected);
 }
 
 async function checkTodosInLocalStorage(page: Page, title: string) {
-  return await page.waitForFunction(t => {
-    return JSON.parse(localStorage['react-todos']).map((todo: any) => todo.title).includes(t);
+  return await page.waitForFunction((t) => {
+    return JSON.parse(localStorage["react-todos"])
+      .map((todo: any) => todo.title)
+      .includes(t);
   }, title);
 }
